@@ -1,8 +1,188 @@
-Titanic Dataset Trustworthiness & Exploratory Data Analysis (EDA) AuditAn exhaustive, end-to-end Exploratory Data Analysis (EDA) and data trustworthiness audit performed on the classic Titanic - Machine Learning from Disaster dataset. This project evaluates data hygiene, structural anomalies, distributional characteristics, causal relationships, and target leakage risks to determine production readiness.📌 Project OverviewIn real-world machine learning pipelines, raw data is rarely ready for model training. This project serves as a comprehensive technical case study and data audit framework. Rather than jumping straight into predictive modeling, this audit systematically inspects the dataset's provenance, data quality, statistical distributions, and hidden biases to answer a fundamental question: Can this dataset be trusted for downstream predictive modeling?Final Audit Verdict: APPROVE WITH CONDITIONSCore Takeaway: While the dataset contains rich multi-modal behavioral and socio-economic features, it suffers from significant missing attribute vectors (Age, Cabin), heavily skewed economic metrics (Fare), and potential confounding variables that must be rigorously sanitized prior to pipeline ingestion.🔍 Audit Workflow & MethodologyThe project is structured around an 8-stage data auditing framework:Part A: Dataset Investigation & ProvenanceEstablishes origin tracking, structural dimensions ($891$ rows, $11-12$ columns), and comprehensive data-type profiling via automated dictionary mapping.Part B: Data Quality AuditIdentifies missing data vectors (e.g., Age at ~19.8% and Cabin at ~77%) and establishes mitigation pipelines using median imputation and missing-indicator mapping.Part C: Distribution AnalysisEvaluates continuous and discrete distributions, highlighting the heavy right-skewness of passenger ticket Fare through histogram and boxplot analysis.Part D: Anomaly & Outlier DetectionFlags unusual data patterns, including zero-fare passengers (crew members or complimentary ticket holders) and extreme luxury fare outliers.Part E: Relationship Hunting (Hypothesis-First Rule)Tests core structural hypotheses—specifically analyzing how passenger class (Pclass) dictated survival probability during evacuation protocols.Part F: The Hidden Target Leakage ChallengeAudits schema features to ensure zero post-event leakage (e.g., stripping post-accident recovery logs, rescue boat indicators, or survivor notes).Part G: Correlation vs. Causation AnalysisDissects the positive statistical correlation between Fare and Survived, proving that wealth was a confounding proxy for socio-economic positioning (Pclass) rather than a direct causal mechanism.Part H: Reproducibility SetupEstablishes environment specifications, library dependency tracking, and fixed random seed states (random_state = 42) for deterministic execution.📂 Repository Architecture├── titanic.csv                        # Raw dataset source file
-├── titanic_eda_audit.py               # Main execution script covering the full audit pipeline
-└── README.md                          # Comprehensive project documentation
-🚀 Getting Started & InstallationTo run this audit locally on your machine, follow these setup instructions:1. Clone the Repositorygit clone https://github.com/your-username/titanic-eda-audit-assignment.git
+# Titanic Dataset Trustworthiness & Exploratory Data Analysis (EDA) Audit
+
+A comprehensive Exploratory Data Analysis (EDA) and data trustworthiness audit of the classic **Titanic – Machine Learning from Disaster** dataset. This project investigates data quality, missing values, statistical distributions, outliers, feature relationships, potential biases, and target leakage risks to assess the dataset's readiness for machine learning.
+
+## 📌 Project Overview
+
+Real-world datasets often contain missing values, inconsistencies, unusual observations, and hidden biases. Before building a machine learning model, it is important to understand whether the available data is reliable and suitable for analysis.
+
+This project follows a structured auditing approach to explore the Titanic dataset, identify data quality issues, investigate relationships between features, and highlight considerations for future predictive modeling.
+
+**Final Audit Verdict:** `APPROVE WITH CONDITIONS`
+
+**Key Takeaway:** The dataset contains useful passenger information for survival analysis, but missing values, skewed fare distributions, and potential confounding factors require careful consideration before model training.
+
+## 🎯 Project Objectives
+
+- Investigate the dataset's structure, origin, and data types.
+- Identify missing values and assess data quality.
+- Analyze feature distributions using statistical summaries and visualizations.
+- Detect unusual values and potential outliers.
+- Explore relationships between passenger characteristics and survival.
+- Identify potential target leakage risks.
+- Distinguish statistical correlation from causation.
+- Establish reproducible analysis practices.
+
+## 🔍 EDA Audit Workflow
+
+### Part A: Dataset Investigation & Provenance
+
+- Inspect the dataset's dimensions and column names.
+- Review data types and overall structure.
+- Generate a summary of the available features.
+- Establish a baseline understanding of the dataset.
+
+### Part B: Data Quality Audit
+
+- Identify missing values in columns such as `Age` and `Cabin`.
+- Calculate missing-value percentages.
+- Evaluate possible handling strategies, including median imputation and missing-value indicators.
+- Assess whether dropping incomplete records could cause information loss.
+
+### Part C: Distribution Analysis
+
+- Analyze numerical and categorical features.
+- Use histograms and boxplots to understand data distributions.
+- Investigate the right-skewed distribution of passenger fares.
+- Review summary statistics to identify patterns and unusual values.
+
+### Part D: Anomaly & Outlier Detection
+
+- Investigate unusually high ticket fares.
+- Examine records with zero fares.
+- Use statistical summaries and visualizations to identify potential outliers.
+- Distinguish data errors from unusual but potentially valid observations.
+
+### Part E: Relationship Analysis
+
+- Explore relationships between passenger class (`Pclass`) and survival.
+- Compare survival rates across relevant passenger groups.
+- Use hypothesis-driven analysis to investigate patterns in the dataset.
+- Support observations with appropriate statistical summaries and visualizations.
+
+### Part F: Target Leakage Assessment
+
+- Review the available features for information that would not have been available at prediction time.
+- Identify potential post-outcome information risks.
+- Consider whether each feature is appropriate for a survival prediction pipeline.
+- Emphasize the importance of separating legitimate predictive features from information that could artificially inflate model performance.
+
+### Part G: Correlation vs. Causation
+
+- Investigate the relationship between `Fare` and `Survived`.
+- Explore how ticket fare may be associated with passenger class (`Pclass`).
+- Discuss socioeconomic factors as possible confounders.
+- Avoid interpreting statistical associations as proof of direct causation.
+
+### Part H: Reproducibility
+
+- Document the required Python libraries.
+- Establish a consistent project structure.
+- Use fixed random seeds where randomness is involved.
+- Support repeatable analysis and easier project maintenance.
+
+## 📊 Key Findings & Observations
+
+### 1. Missing Data
+
+Columns such as `Age` and `Cabin` contain missing values. Missing data should be handled carefully because blindly removing incomplete records may discard useful information.
+
+### 2. Fare Distribution
+
+The `Fare` feature has a right-skewed distribution, with a small number of passengers paying substantially higher fares than most passengers.
+
+### 3. Passenger Class and Survival
+
+Passenger class (`Pclass`) is an important feature to investigate when analyzing survival differences. Survival rates can be compared across classes to identify socioeconomic and travel-related patterns.
+
+### 4. Outliers and Unusual Values
+
+Zero fares and unusually high fares require investigation rather than automatic removal. Such values may represent valid but uncommon circumstances.
+
+### 5. Correlation and Confounding
+
+A relationship between `Fare` and `Survived` does not establish that fare itself caused survival. Passenger class and other associated factors may help explain the observed relationship.
+
+### 6. Target Leakage
+
+Features containing information revealed only after the outcome must not be used to predict that outcome. Careful feature selection helps ensure a realistic evaluation of model performance.
+
+## 🛠️ Technologies Used
+
+- **Python** — Core programming language
+- **Pandas** — Data loading, cleaning, and analysis
+- **NumPy** — Numerical operations
+- **Matplotlib** — Data visualization
+- **Seaborn** — Statistical visualization
+
+## 📂 Project Structure
+
+```text
+titanic-eda-audit/
+│
+├── titanic.csv
+├── titanic_eda_audit.py
+└── README.md
+```
+
+- `titanic.csv` — Dataset used for analysis.
+- `titanic_eda_audit.py` — Main Python script containing the EDA audit.
+- `README.md` — Project documentation and overview.
+
+## 🚀 Getting Started
+
+### 1. Clone the Repository
+
+Replace the example repository URL with your actual GitHub repository URL.
+
+```bash
+git clone https://github.com/your-username/titanic-eda-audit-assignment.git
+```
+
+Navigate into the project directory:
+
+```bash
 cd titanic-eda-audit-assignment
-2. Install DependenciesEnsure you have Python installed along with the essential data science stack:pip install pandas numpy matplotlib seaborn
-3. Run the Audit ScriptPlace your raw titanic.csv file into the root directory and execute the audit script:python titanic_eda_audit.py
-📊 Key Insights SummarySocio-Economic Disparity: Passengers in higher ticket classes (Pclass = 1) experienced drastically higher survival rates, driven by physical proximity to upper decks and priority evacuation access.Missing Data Hygiene: Blindly dropping rows with missing values would result in losing over 75% of data points in structural attributes like Cabin, making feature imputation and indicator flags mandatory.Confounding Variables: While financial metrics correlate with survival, raw monetary value did not save lives; social hierarchy and structural access were the true underlying drivers.
+```
+
+### 2. Install Dependencies
+
+Make sure Python is installed, then run:
+
+```bash
+pip install pandas numpy matplotlib seaborn
+```
+
+### 3. Add the Dataset
+
+Place `titanic.csv` in the project root directory, alongside the Python script.
+
+### 4. Run the Audit
+
+Execute the script using:
+
+```bash
+python titanic_eda_audit.py
+```
+
+The script will run the analysis implemented in the project and display or generate its corresponding outputs.
+
+## 🔮 Future Improvements
+
+- Add automated data quality checks.
+- Create more detailed visualizations for feature relationships.
+- Compare different missing-value handling strategies.
+- Explore feature engineering for survival prediction.
+- Build a baseline machine learning model after completing the data audit.
+- Add automated reports summarizing data quality and potential risks.
+
+## 📚 Dataset
+
+This project is based on the **Titanic – Machine Learning from Disaster** dataset, commonly used for introductory data analysis and machine learning exercises.
+
+Dataset source: [Kaggle — Titanic: Machine Learning from Disaster](https://www.kaggle.com/competitions/titanic)
+
+## 📄 License
+
+Specify a license for this project if you intend to distribute or reuse the code publicly. If no license has been added, all rights are not automatically granted to others simply because the repository is public.
+
